@@ -1,6 +1,7 @@
 package br.com.ricardo.starwars.data.repository;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -12,6 +13,6 @@ public interface PlanetRepository extends PagingAndSortingRepository<Planet, Big
 	@Override
 	Optional<Planet> findById(BigInteger id);
 
-	Optional<Planet> findByName(String name);
+	List<Planet> findByName(String name);
 
 }

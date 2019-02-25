@@ -22,6 +22,17 @@ public class Planet {
 	private String name;
 	private String climate;
 	private String terrain;
+	
+	public Planet(String name, String climate, String terrain) {
+		super();
+		this.name = name;
+		this.climate = climate;
+		this.terrain = terrain;
+	}
+	
+	public Planet() {
+		super();
+	}
 
 	public BigInteger getId() {
 		return id;

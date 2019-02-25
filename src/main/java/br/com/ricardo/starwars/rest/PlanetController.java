@@ -4,6 +4,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,9 +73,9 @@ public class PlanetController {
 	@GetMapping("/names/{name}")
 	public ResponseEntity<Response> getByName(@PathVariable(value = "name", required = true) String name) {
 
-		Planet planet = planetServ.findByName(name);
+		List<Planet> planets = planetServ.findByName(name);
 
-		Response response = new Response(planet, "planet.found");
+		Response response = new Response(planets, "planet.found");
 		response.add(linkTo(methodOn(PlanetController.class).getByName(name)).withSelfRel());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -81,12 +83,6 @@ public class PlanetController {
 	
 	@PostMapping
 	public ResponseEntity<Response> create(@RequestBody Planet req) {
-		
-		//TODO criar os testes unitarios
-		//TODO Commitar no git
-		//TODO deploy no heroku
-		//TODO escrever o README
-		//TODO Add swagger
 		
 		BigInteger id = req.getId();
 		if (id != null) {
@@ -107,6 +103,18 @@ public class PlanetController {
 		
 	}
 	
+	@PutMapping
+	public ResponseEntity<Response> update(@RequestBody Planet req) {
+		
+		Planet planet = planetServ.update(req);
+		
+		Response response = new Response(planet, "planet.updated");
+		response.add(linkTo(methodOn(PlanetController.class).update(req)).withSelfRel());
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);
+		
+	}
+	
 	@DeleteMapping("/ids/{idNumber}")
 	public ResponseEntity<Response> deleteById(@PathVariable(value = "idNumber", required = true) BigInteger id) {
 		
@@ -115,7 +123,7 @@ public class PlanetController {
 		Response response = new Response(id, "planet.deleted");
 		response.add(linkTo(methodOn(PlanetController.class).deleteById(id)).withSelfRel());
 
-		return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}
 

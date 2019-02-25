@@ -1,6 +1,7 @@
 package br.com.ricardo.starwars.service;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +38,11 @@ public class PlanetService {
 
 	public Planet findById(BigInteger id) {
 		Optional<Planet> planetId = planetRepo.findById(id);
-		return planetId.get();
+		if (planetId.isPresent()) {
+			return planetId.get();
+		}
+		
+		throw new IllegalStateException("Not found");
 	}
 
 	public Page<Planet> findAll(Pageable pageable) {
@@ -45,11 +50,20 @@ public class PlanetService {
 		return page;
 	}
 
-	public Planet findByName(String name) {
-		Optional<Planet> planet = planetRepo.findByName(name);
-		return planet.get();
+	public List<Planet> findByName(String name) {
+		List<Planet> planets = planetRepo.findByName(name);
+		
+		if (planets == null)
+			Collections.emptyList();
+		
+		return planets;
 	}
 
+	public Planet update(Planet planet) {
+		Planet updated = create(planet);
+		return updated;
+	}
+	
 	public Planet create(Planet planet) {
 		Planet saved = planetRepo.save(planet);
 		return saved;
