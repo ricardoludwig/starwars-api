@@ -16,19 +16,3 @@ logging:
     org.springframework.web: ERROR
     org.hibernate: ERROR
     br.com.ricardoludwig.starwars: DEBUG
-        
----
-spring:
-    profiles: heroku
-    datasource:
-        driver-class-name: org.postgresql.Driver
-        username: ${JDBC_DATABASE_USERNAME}
-        password: ${JDBC_DATABASE_PASSWORD}
-        platform: postgresql
-        url: ${JDBC_DATABASE_URL}
-    jpa:
-        database-platform: org.hibernate.dialect.PostgreSQLDialect
-        generate-ddl: false
-        hibernate:
-            ddl-auto: none
-        show-sql: true

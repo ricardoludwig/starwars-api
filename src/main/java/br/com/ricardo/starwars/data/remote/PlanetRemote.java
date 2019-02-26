@@ -2,6 +2,7 @@ package br.com.ricardo.starwars.data.remote;
 
 import java.util.Arrays;
 
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -10,13 +11,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import br.com.ricardo.starwars.data.remote.execption.RemoteServiceUnavailableException;
 import br.com.ricardo.starwars.service.CollectionPlanet;
 
 @Service
 public class PlanetRemote {
 
+	private static final Logger LOG = Logger.getLogger(PlanetRemote.class);
+	
 	private static final String HTTPS_SWAPI_CO_API_PLANETS = "https://swapi.co/api/planets";
-
+	
 	public CollectionPlanet getCollectionPlanet(int pageNumber) {
 
 		ResponseEntity<CollectionPlanet> response = doGet(pageNumber);
@@ -29,18 +33,24 @@ public class PlanetRemote {
 	}
 	
 	public ResponseEntity<CollectionPlanet> doGet(int pageNumber) {
-		
+
 		if (pageNumber < 1)
 			pageNumber = 1;
-		
+
 		HttpHeaders headers = buildHeaders();
-		
-		ResponseEntity<CollectionPlanet> response = new RestTemplate()
-				.exchange(HTTPS_SWAPI_CO_API_PLANETS + "?page=" + pageNumber, HttpMethod.GET, 
-						new HttpEntity<String>("parameters", headers), CollectionPlanet.class);
-		
-		return response;
-		
+
+		try {
+
+			ResponseEntity<CollectionPlanet> response = new RestTemplate().exchange(
+					HTTPS_SWAPI_CO_API_PLANETS + "?page=" + pageNumber, HttpMethod.GET,
+					new HttpEntity<String>("parameters", headers), CollectionPlanet.class);
+			return response;
+			
+		} catch (Exception ex) {
+			LOG.error("Remote connection fail", ex);
+			throw new RemoteServiceUnavailableException(ex);
+		}
+
 	}
 
 	private HttpHeaders buildHeaders() {

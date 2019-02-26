@@ -34,15 +34,6 @@ import br.com.ricardo.starwars.service.PlanetService;
 @WebMvcTest(PlanetController.class)
 public class PlanetControllerTest {
 	
-	//TODO adicionar validacao
-	//TODO adicinar tramento de exceptions
-	
-	//TODO criar os testes unitarios (casos de erro, validar paginacao)
-	
-	//TODO deploy no heroku
-	//TODO escrever o README
-	//TODO Add swagger
-	
 	@Autowired
 	private MockMvc mockMvc;
 	

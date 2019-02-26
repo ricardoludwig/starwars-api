@@ -84,16 +84,6 @@ public class PlanetController {
 	@PostMapping
 	public ResponseEntity<Response> create(@RequestBody Planet req) {
 		
-		BigInteger id = req.getId();
-		if (id != null) {
-			Planet found = planetServ.findById(id);
-			if (found != null) {
-				Response response = new Response(found, "planet.already.exists");
-				response.add(linkTo(methodOn(PlanetController.class).create(req)).withSelfRel());
-				return new ResponseEntity<>(response, HttpStatus.CONFLICT);
-			}
-		}
-		
 		Planet planet = planetServ.create(req);
 		
 		Response response = new Response(planet, "planet.created");
